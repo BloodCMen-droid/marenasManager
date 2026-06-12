@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title>Mantenimiento Productos</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <div class="content">
+
+        <div class="header">
+
+            <h1>🍖 Productos</h1>
+
+            <a th:href="@{/newProducto}" class="btn-create">
+                + Crear Producto
+            </a>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Activo</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:if="${#lists.isEmpty(productos)}">
+
+                        <td colspan="7" class="empty">
+                            No existen productos
+                        </td>
+
+                    </tr>
+
+                    <tr th:each="p : ${productos}">
+
+                        <td th:text="${p.id}"></td>
+
+                        <td th:text="${p.nombre}"></td>
+
+                        <td>
+                            S/
+                            <span th:text="${p.precio}"></span>
+                        </td>
+
+                        <td th:text="${p.categoria != null ? p.categoria.nombre : 'No definido'}"></td>
+
+                        <td>
+
+                            <span
+                            th:class="${p.activo ? 'estado-on' : 'estado-off'}"
+                            th:text="${p.activo ? 'Activo' : 'Inactivo'}">
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <a class="btn editar"
+                                th:href="@{/editProducto/{id}(id=${p.id})}">
+                                    ✏ Editar
+                                </a>
+
+                                <a class="btn eliminar"
+                                th:href="@{/deleteProducto/{id}(id=${p.id})}"
+                                onclick="return confirm('¿Eliminar producto?')">
+
+                                    🗑 Eliminar
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

@@ -4,20 +4,21 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "empleados")
+@Table(name = "tbl_empleados")
 public class Empleado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_empleado")
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(name="nombre_empleado",nullable = false, length = 150)
     private String nombre;
 
-    @Column(length = 100)
+    @Column(name="cargo_empleado",length = 100)
     private String cargo; // mozo, cocinero, cajero, etc.
 
-    @Column(length = 20)
+    @Column(name="telefono_empleado",length = 20)
     private String telefono;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)

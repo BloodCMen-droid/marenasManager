@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - ParrillaPro</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <main class="content">
+
+        <header class="topbar">
+            <h1>🔥 Dashboard Principal</h1>
+            <p>Bienvenido al sistema de ventas de ParrillaPro</p>
+        </header>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>🍖 Productos</h3>
+                <span>128</span>
+            </div>
+
+            <div class="card">
+                <h3>📋 Categorías</h3>
+                <span>12</span>
+            </div>
+
+            <div class="card">
+                <h3>🧾 Pedidos Hoy</h3>
+                <span>48</span>
+            </div>
+
+            <div class="card">
+                <h3>💰 Ventas del Día</h3>
+                <span>S/ 2,450</span>
+            </div>
+
+        </section>
+
+        <section class="welcome">
+
+            <div class="welcome-box">
+
+                <h2>🔥 Restaurante & Parrilla</h2>
+
+                <p>
+                    Administra productos, categorías,
+                    pedidos y ventas desde un único lugar.
+                </p>
+
+                <button>
+                    Ver Reportes
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="quick-actions">
+
+            <h2>Accesos Rápidos</h2>
+
+            <div class="actions">
+
+                <a th:href="@{/productos}" class="action-card">
+                    🍖
+                    <span>Productos</span>
+                </a>
+
+                <a th:href="@{/categorias}" class="action-card">
+                    📋
+                    <span>Categorías</span>
+                </a>
+
+                <a th:href="@{/pedidos}" class="action-card">
+                    🧾
+                    <span>Pedidos</span>
+                </a>
+
+                <a th:href="@{/empleados}" class="action-card">
+                    👨‍🍳
+                    <span>Empleados</span>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+</html>

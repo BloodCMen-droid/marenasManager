@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav class="sidebar" th:fragment="menu">
+
+    <div class="logo">
+        <h2>🔥 ParrillaPro</h2>
+        <span>Sistema de Ventas</span>
+    </div>
+
+    <a th:href="@{/}">
+        🏠 Dashboard
+    </a>
+
+    <a th:href="@{/listProductos}">
+        🍖 Productos
+    </a>
+
+    <a th:href="@{/listCategorias}">
+        📋 Categorías
+    </a>
+
+    <a th:href="@{/listPedidos}">
+        🧾 Pedidos
+    </a>
+
+    <a th:href="@{/listEmpleados}">
+        👨‍🍳 Empleados
+    </a>
+
+    <a th:href="@{/listReportes}">
+        📊 Reportes
+    </a>
+
+</nav>
+
+</body>
+</html>

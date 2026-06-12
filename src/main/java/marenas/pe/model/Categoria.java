@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "categorias")
+@Table(name = "tbl_categorias")
 public class Categoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_categoria")
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "nombre_categoria" ,nullable = false, length = 100)
     private String nombre;
 
-    @Column(length = 255)
+    @Column (name = "descripcion_categoria",length = 255)
     private String descripcion;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)

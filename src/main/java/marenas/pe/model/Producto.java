@@ -5,23 +5,24 @@ import java.math.BigDecimal;
 import java.util.List;
  
 @Entity
-@Table(name = "productos")
+@Table(name = "tbl_productos")
 public class Producto {
  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_producto")
     private Long id;
  
-    @Column(nullable = false, length = 150)
+    @Column(name="nombre_producto",nullable = false, length = 150)
     private String nombre;
  
-    @Column(length = 255)
+    @Column(name="descripcion_producto",length = 255)
     private String descripcion;
  
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name="precio_producto",nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
  
-    @Column(nullable = false)
+    @Column(name="activo_producto",nullable = false)
     private Boolean activo = true;
  
     // ManyToOne → Categoria (muchos productos pertenecen a una categoría)
@@ -29,15 +30,7 @@ public class Producto {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
  
-    // ManyToMany → Ingrediente (tabla intermedia: producto_ingrediente)
-    @ManyToMany
-    @JoinTable(
-        name = "producto_ingrediente",
-        joinColumns = @JoinColumn(name = "producto_id"),
-        inverseJoinColumns = @JoinColumn(name = "ingrediente_id")
-    )
-    private List<Ingrediente> ingredientes;
- 
+
     // Constructores
     public Producto() {}
  
@@ -67,6 +60,5 @@ public class Producto {
     public Categoria getCategoria() { return categoria; }
     public void setCategoria(Categoria categoria) { this.categoria = categoria; }
  
-    public List<Ingrediente> getIngredientes() { return ingredientes; }
-    public void setIngredientes(List<Ingrediente> ingredientes) { this.ingredientes = ingredientes; }
+   
 }

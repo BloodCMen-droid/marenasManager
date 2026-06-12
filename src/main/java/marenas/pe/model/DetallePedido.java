@@ -4,17 +4,18 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "detalle_pedidos")
+@Table(name = "tbl_detallePedidos")
 public class DetallePedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dp_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "dp_cantidad",nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "dp_precioUnitario",nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
     // ManyToOne → Pedido
