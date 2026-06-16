@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Formulario Categoria</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="card">
+
+            <h1 th:text="${categoria.id == null ?
+                '🍖 Nuevo Categoria' :
+                '✏ Editar Categoria'}">
+            </h1>
+
+            <form
+                th:action="@{/saveCategoria}"
+                th:object="${categoria}"
+                method="post">
+
+                <!-- ID oculto para editar -->
+                <input  type="hidden" th:field="*{id}">
+
+                <div class="campo">
+
+                    <label>Nombre</label>
+
+                    <input
+                        type="text"
+                        th:field="*{nombre}"
+                        required>
+
+                </div>
+
+                <div class="campo">
+
+                    <label>Descripción</label>
+
+                    <textarea
+                        rows="3"
+                        th:field="*{descripcion}">
+                    </textarea>
+
+                </div>
+
+                
+
+               
+                <div class="acciones">
+
+                    <button type="submit">
+
+                        💾 Guardar
+
+                    </button>
+
+                    <a
+                        th:href="@{/listCategorias}">
+
+                        ← Regresar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

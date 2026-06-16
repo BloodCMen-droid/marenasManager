@@ -30,7 +30,7 @@ public class ProductosController {
 	@GetMapping("/listProductos")
 	public String listarAlumnos(Model modelo) {
 		modelo.addAttribute("productos",produImp.getAllProducto());
-		return "mantenimiento-productos";
+		return "administrador/mantenimiento-productos";
 	}
 	
 	@GetMapping("/newProducto")
@@ -38,7 +38,7 @@ public class ProductosController {
 		Producto producto = new Producto();
 		modelo.addAttribute("producto",producto);
 		modelo.addAttribute("categorias", cateImp.getAllCategoria());
-		return "producto-form";
+		return "administrador/producto-form";
 	}
 	
 	@PostMapping("/saveProducto")
@@ -57,6 +57,6 @@ public class ProductosController {
 	public String editAlumno(@PathVariable Long id, Model modelo) {
 		modelo.addAttribute("producto",produImp.searchProducto(id).orElse(null));
 		modelo.addAttribute("categorias", cateImp.getAllCategoria());
-		return "producto-form";
+		return "administrador/producto-form";
 	}
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title>Mantenimiento Categoria</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <div class="content">
+
+        <div class="header">
+
+            <h1>🍖 Categoria</h1>
+
+            <a th:href="@{/newCategoria}" class="btn-create">
+                + Crear Categoria
+            </a>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:if="${#lists.isEmpty(categorias)}">
+
+                        <td colspan="7" class="empty">   No existen Categoria </td> <!--En caso no existan productos -->
+
+                    </tr>
+
+                    <tr th:each="c : ${categorias}">
+                        <td th:text="${c.id}"></td>
+                        <td th:text="${c.nombre}"></td>
+						<td th:text="${c.descripcion}"></td>
+                        <td>
+
+                            <div class="actions">
+                                <a class="btn editar"
+                                th:href="@{/editCategoria/{id}(id=${c.id})}">
+                                    ✏ Editar
+                                </a>
+                                <a class="btn eliminar"
+                                th:href="@{/deleteCategoria/{id}(id=${c.id})}"
+                                onclick="return confirm('¿Eliminar Categoria?')">
+
+                                    🗑 Eliminar
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

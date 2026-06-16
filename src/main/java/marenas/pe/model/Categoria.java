@@ -12,7 +12,7 @@ public class Categoria {
     @Column(name = "id_categoria")
     private Long id;
 
-    @Column(name = "nombre_categoria" ,nullable = false, length = 100)
+    @Column(name = "nombre_categoria" ,nullable = true, length = 100)
     private String nombre;
 
     @Column (name = "descripcion_categoria",length = 255)
@@ -25,20 +25,49 @@ public class Categoria {
     public Categoria() {}
 
     public Categoria(String nombre, String descripcion) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+
     }
 
+	public Categoria(String nombre, String descripcion, List<Producto> productos) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.productos = productos;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public List<Producto> getProductos() {
+		return productos;
+	}
+
+	public void setProductos(List<Producto> productos) {
+		this.productos = productos;
+	}
+    
+
     // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+	
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-
-    public List<Producto> getProductos() { return productos; }
-    public void setProductos(List<Producto> productos) { this.productos = productos; }
 }

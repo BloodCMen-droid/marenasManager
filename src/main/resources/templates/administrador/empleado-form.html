@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Formulario Producto</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="card">
+
+            <h1 th:text="${empleado.id == null ?
+                '🍖 Nuevo Empleado' :
+                '✏ Editar Empleado'}">
+            </h1>
+
+            <form
+                th:action="@{/saveEmpleado}"
+                th:object="${empleado}"
+                method="post">
+
+                <!-- ID oculto para editar -->
+                <input  type="hidden" th:field="*{id}">
+
+                <div class="campo">
+
+                    <label>Nombre</label>
+
+                    <input
+                        type="text"
+                        th:field="*{nombre}"
+                        required>
+
+                </div>
+                
+                <div class="campo">
+
+                    <label>Telefono</label>
+
+                    <input
+                        type="text"
+                        th:field="*{telefono}"
+                        required>
+
+                </div>
+                
+
+
+
+                <div class="campo">
+
+                    <label>Rol</label>
+
+                    <select
+                        th:field="*{rol.id}">
+
+                        <option value="">
+                            Seleccione Empleado
+                        </option>
+
+                        <option
+                            th:each="r : ${roles}"
+                            th:value="${r.id}"
+                            th:text="${r.nombre}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+              
+
+                <div class="acciones">
+
+                    <button type="submit">
+
+                        💾 Guardar
+
+                    </button>
+
+                    <a
+                        th:href="@{/listProductos}">
+
+                        ← Regresar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

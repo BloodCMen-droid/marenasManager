@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title>Mantenimiento Empleado</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <div class="content">
+
+        <div class="header">
+
+            <h1>🍖 Empleado</h1>
+
+            <a th:href="@{/newEmpleado}" class="btn-create">
+                + Crear Empleado
+            </a>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>telefono</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:if="${#lists.isEmpty(empleados)}">
+
+                        <td colspan="7" class="empty">
+                            No existen Empleados
+                        </td>
+
+                    </tr>
+
+                    <tr th:each="e : ${empleados}">
+
+                        <td th:text="${e.id}"></td>
+
+                        <td th:text="${e.nombre}"></td>
+                       
+                        <td>
+                            +51
+                            <span th:text="${e.telefono}"></span>
+                        </td>
+
+                        <td th:text="${e.rol != null ? e.rol.nombre : 'No definido'}"></td>
+
+
+                        <td>
+
+                            <div class="actions">
+
+                                <a class="btn editar"
+                                th:href="@{/editEmpleado/{id}(id=${e.id})}">
+                                    ✏ Editar
+                                </a>
+
+                                <a class="btn eliminar"
+                                th:href="@{/deleteEmpleado/{id}(id=${e.id})}"
+                                onclick="return confirm('¿Eliminar Empleado?')">
+
+                                    🗑 Eliminar
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

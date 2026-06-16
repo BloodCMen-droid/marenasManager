@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title>Mantenimiento Rol</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <div class="content">
+
+        <div class="header">
+
+            <h1>🍖 Rol</h1>
+
+            <a th:href="@{/newRol}" class="btn-create">
+                + Crear Rol
+            </a>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:if="${#lists.isEmpty(roles)}">
+
+                        <td colspan="7" class="empty">   No existen roles </td> <!--En caso no existan productos -->
+
+                    </tr>
+
+                    <tr th:each="r : ${roles}">
+                        <td th:text="${r.id}"></td>
+                        <td th:text="${r.nombre}"></td>
+                        <td>
+
+                            <div class="actions">
+                                <a class="btn editar"
+                                th:href="@{/editRol/{id}(id=${r.id})}">
+                                    ✏ Editar
+                                </a>
+                                <a class="btn eliminar"
+                                th:href="@{/deleteRol/{id}(id=${r.id})}"
+                                onclick="return confirm('¿Eliminar Rol?')">
+
+                                    🗑 Eliminar
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title>Mantenimiento Mesa</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <div class="content">
+
+        <div class="header">
+
+            <h1>🍖 Mesa</h1>
+
+            <a th:href="@{/newMesa}" class="btn-create">
+                + Crear Mesa
+            </a>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Numero</th>
+                        <th>Capacidad</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:if="${#lists.isEmpty(mesas)}">
+
+                        <td colspan="4" class="empty">   No existen Mesas </td> <!--En caso no existan mesas -->
+
+                    </tr>
+
+                    <tr th:each="m : ${mesas}">
+                        <td th:text="${m.id}"></td>
+                        <td th:text="${m.numero}"></td>
+						<td th:text="${m.capacidad}"></td>
+                        <td>
+
+                            <div class="actions">
+                                <a class="btn editar"
+                                th:href="@{/editMesa/{id}(id=${m.id})}">
+                                    ✏ Editar
+                                </a>
+                                <a class="btn eliminar"
+                                th:href="@{/deleteMesa/{id}(id=${m.id})}"
+                                onclick="return confirm('¿Eliminar Mesa?')">
+
+                                    🗑 Eliminar
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

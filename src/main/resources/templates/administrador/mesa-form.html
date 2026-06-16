@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Formulario Mesa</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="card">
+
+            <h1 th:text="${mesa.id == null ?
+                '🍖 Nuevo Mesa' :
+                '✏ Editar Mesa'}">
+            </h1>
+
+            <form
+                th:action="@{/saveMesa}"
+                th:object="${mesa}"
+                method="post">
+
+                <!-- ID oculto para editar -->
+                <input  type="hidden" th:field="*{id}">
+
+                <div class="campo">
+
+                    <label>Numero</label>
+
+                    <input 
+                        type="number"
+                        th:field="*{numero}"
+                        required
+                        min="1" >
+
+                </div>  <!-- main 1: Evitar mesas negativas -->
+
+					<div class="campo">
+
+						<label for="capacidad">Capacidad</label>
+                           <input 
+
+							type="number" 
+							th:field="*{capacidad}" 
+							min="1" 
+							required>
+
+					</div>
+
+
+
+
+					<div class="acciones">
+
+                    <button type="submit">
+
+                        💾 Guardar
+
+                    </button>
+
+                    <a
+                        th:href="@{/listMesas}">
+
+                        ← Regresar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

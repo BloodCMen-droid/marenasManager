@@ -30,6 +30,13 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
+    
+    
+    // ManyToOne → Mesa
+    @ManyToOne
+    @JoinColumn(name = "mesa_id")
+    private Mesa mesa;
+    
 
     // OneToMany → DetallePedido
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
