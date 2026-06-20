@@ -1,7 +1,8 @@
 package marenas.pe.service;
 
+
+
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,12 @@ public class PedidoImplement implements IPedidoService{
 		return pedidoRepo.save(pedido);
 	}
 
+	@Override
+	public List<Pedido> getAllPedido(){
+
+	    return pedidoRepo.findAll();
+
+	}
 
 
 }

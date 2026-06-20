@@ -1,87 +1,137 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Agregar Pedido</title>
-
+    <title>Registrar Pedido</title>
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link rel="stylesheet" th:href="@{/css/producto-form.css}">
-
 </head>
-
 <body>
-
 <div class="container">
-
     <div th:replace="~{fragments/dashboard :: menu}"></div>
 
     <div class="content">
-
         <div class="card">
+            <h1>🍖 Registrar Pedido</h1>
 
+            <!-- DATOS DEL PEDIDO -->
+            <div class="section">
+                <h2>Datos del Pedido</h2>
+                <form th:action="@{/savePedido}" method="post" id="formPedido">
+                    <div class="campo">
+                        <label>Mesa</label>
+                        <select name="mesaId">
+                            <option value="">Seleccione mesa</option>
+                            <option th:each="m : ${mesas}" th:value="${m.id}" th:text="${m.numero}"></option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="usuarioId" value="1">
+                </form>
+            </div>
 
-          <form th:action="@{/saveDetalle}" method="post">
+            <hr>
 
+            <!-- AGREGAR PRODUCTO -->
+            <div class="section">
+                <h2>Agregar Productos</h2>
+                <form th:action="@{/saveDetalle}" method="post" id="formDetalle">
 
-    <label>Producto</label>
+                    <div class="campo">
+                        <label>Categoría</label>
+                        <select id="categoriaFiltro">
+                            <option value="">Todas</option>
+                            <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"></option>
+                        </select>
+                    </div>
 
-    <select name="productoId">
+                    <div class="campo">
+                        <label>Producto</label>
+                        <select name="productoId" id="productoSelect">
+                            <option th:each="p : ${productos}" 
+                                    th:value="${p.id}" 
+                                    th:data-categoria="${p.categoria.id}"
+                                    th:text="${p.nombre}"></option>
+                        </select>
+                    </div>
 
-        <option 
-        th:each="p : ${productos}"
-        th:value="${p.id}"
-        th:text="${p.nombre}">
-        </option>
+                    <div class="campo">
+                        <label>Cantidad</label>
+                        <input type="number" name="cantidad" value="1" min="1">
+                    </div>
 
-    </select>
+                    <div class="campo">
+                        <label>Adicional</label>
+                        <input type="text" name="adicional" placeholder="Ej: sin cebolla, bien cocido...">
+                    </div>
 
+                    <button type="submit" class="btn-create">Agregar producto</button>
+                </form>
+            </div>
 
+            <hr>
 
-    <label>Cantidad</label>
+            <!-- DETALLE TEMPORAL -->
+            <div class="section">
+                <h2>Detalle del Pedido</h2>
+                <table class="table-detalle">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Adicional</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="d, iter : ${detalleTemporal}">
+                <td th:text="${d.productoNombre}"></td>
+                <td th:text="${d.cantidad}"></td>
+                <td th:text="${d.precio}"></td>
+                <td th:text="${d.subtotal}"></td>
+                <td th:text="${d.adicional}"></td>
+                <td>
+                    <a class="btn eliminar" 
+                       th:href="@{/deleteDetalle/{id}(id=${d.idTemporal})}">
+                        🗑 Quitar
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+            </div>
 
-    <input 
-    type="number"
-    name="cantidad"
-    value="1">
+            <!-- GUARDAR PEDIDO -->
+            <div class="section mt-4">
+                <form th:action="@{/savePedido}" method="post">
+                    <input type="hidden" name="mesaId" value="1">
+                    <input type="hidden" name="usuarioId" value="1">
+                    <button type="submit" class="btn-create">💾 Guardar Pedido</button>
+                </form>
+            </div>
 
-
-
-    <label>Adicional</label>
-
-    <input 
-    type="text"
-    name="adicional">
-
-
-					<table>
-						<tr>
-							<th>Producto</th>
-							<th>Cantidad</th>
-							<th>Adicional</th>
-						</tr>
-						<tr th:each="d : ${detalleTemporal}">
-							<td th:text="${d.productoNombre}"></td>
-							<td th:text="${d.cantidad}"></td>
-							<td th:text="${d.adicional}"></td>
-						</tr>
-				 </table>
-		
-				 
-	<button type="submit">
-        Agregar
-    </button>
-
-
-    </form>
         </div>
     </div>
 </div>
 
-<script th:src="@{/js/dashboard.js}"></script>
+<!-- SCRIPT DE FILTRADO -->
+<script>
+    document.getElementById("categoriaFiltro").addEventListener("change", function() {
+        const categoriaSeleccionada = this.value;
+        const opciones = document.querySelectorAll("#productoSelect option");
 
+        opciones.forEach(opcion => {
+            if (categoriaSeleccionada === "" || opcion.dataset.categoria === categoriaSeleccionada) {
+                opcion.style.display = "block";
+            } else {
+                opcion.style.display = "none";
+            }
+        });
+
+        // Limpiar selección actual
+        document.getElementById("productoSelect").value = "";
+    });
+</script>
 </body>
-
 </html>

@@ -1,8 +1,10 @@
 package marenas.pe.controller;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import marenas.pe.model.UsuarioCredential;
 import marenas.pe.repository.IMesaRepository;
 import marenas.pe.repository.IProductoRepository;
 import marenas.pe.repository.IUsuarioCredentialRepository;
+import marenas.pe.service.ICategoriaService;
 import marenas.pe.service.IDetallePedidoService;
 import marenas.pe.service.IPedidoService;
 
@@ -41,12 +44,17 @@ public class PedidoController {
 
 	@Autowired
 	private IUsuarioCredentialRepository usuarioRepository;
+	
+	@Autowired
+	private ICategoriaService categoriaService;
 
 
     // Carga formulario nuevo pedido
     @GetMapping("/newPedido")
     public String nuevoPedido(Model model){
     	model.addAttribute("productos",productoRepository.findAll());
+        model.addAttribute("mesas",mesaRepository.findAll());
+    	 model.addAttribute("categorias",categoriaService.getAllCategoria());
         if(!model.containsAttribute("detalleTemporal")){
             model.addAttribute( "detalleTemporal",
                 new ArrayList<DetallePedidoDTO>()
@@ -65,15 +73,23 @@ public class PedidoController {
             @RequestParam(required=false) String adicional,
             @ModelAttribute("detalleTemporal") 
             List<DetallePedidoDTO> detalles){
-        var producto = productoRepository.findById(productoId).get();
+    	Producto producto = productoRepository.findById(productoId).get();
 
         DetallePedidoDTO dto = new DetallePedidoDTO();
         dto.setProductoId(producto.getId());
         dto.setProductoNombre(producto.getNombre());
+        dto.setPrecio(producto.getPrecio());
         
         dto.setCantidad(cantidad);
         dto.setAdicional(adicional);
+        dto.setPrecio(producto.getPrecio());
+        dto.setSubtotal(
+                producto.getPrecio()
+                .multiply(BigDecimal.valueOf(cantidad))
+            );
+
         detalles.add(dto);
+       
         return "redirect:/newPedido";
     }
 
@@ -86,6 +102,8 @@ public class PedidoController {
             List<DetallePedidoDTO> detalles,
             SessionStatus status 
             ){ 
+    	
+    	
     	if(detalles.isEmpty()){ return "redirect:/nuevoPedido"; }
         // 1. Crear Pedido
         Pedido pedido = new Pedido();
@@ -122,5 +140,32 @@ public class PedidoController {
         status.setComplete();
         return "redirect:/pedidos";
     }
+    
+    @PostMapping("/guardarPedido")
+    public String guardarPedido(@ModelAttribute Pedido pedido){
 
+        pedidoService.createPedido(pedido);
+
+        return "redirect:/pedidos";
+
+    }
+    
+    @GetMapping("/pedidos")
+    public String listarPedidos(Model model){
+
+        model.addAttribute("pedidos",pedidoService.getAllPedido());
+
+        return "mesero/pedidos";
+    }
+    
+    @GetMapping("/deleteDetalle/{id}")
+    public String eliminarDetalle(
+            @PathVariable("id") UUID id,
+            @ModelAttribute("detalleTemporal") List<DetallePedidoDTO> detalles
+    ){
+
+        detalles.removeIf(d -> d.getIdTemporal().equals(id));
+
+        return "redirect:/newPedido";
+    }
 }

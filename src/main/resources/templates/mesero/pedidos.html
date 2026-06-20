@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedidos</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+</head>
+<body>
+    <div class="container">
+        
+        <!-- MENU LATERAL -->
+        <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="content">
+            
+            <div class="header">
+                <h1>🍖 Pedidos</h1>
+                <a th:href="@{/newPedido}" class="btn-create">
+                    + Nuevo Pedido
+                </a>
+            </div>
+
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Mesa</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <!-- Mensaje cuando no hay pedidos -->
+                        <tr th:if="${#lists.isEmpty(pedidos)}">
+                            <td colspan="6" class="empty">
+                                No existen pedidos
+                            </td>
+                        </tr>
+
+                        <!-- Lista de pedidos -->
+                        <tr th:each="p : ${pedidos}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${#temporals.format(p.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${p.mesa?.numero}"></td>
+                            <td th:text="${p.usuarioCredential?.empleado?.nombre}"></td>
+                            <td>
+                                <span th:text="${p.estado}"></span>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a class="btn editar"
+                                       th:href="@{/detallePedido/{id}(id=${p.id})}">
+                                        👁 Ver
+                                    </a>
+                                    <a class="btn eliminar"
+                                       th:href="@{/deletePedido/{id}(id=${p.id})}"
+                                       onclick="return confirm('¿Eliminar pedido?')">
+                                        🗑 Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>
