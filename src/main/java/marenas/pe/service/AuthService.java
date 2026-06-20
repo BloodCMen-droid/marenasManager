@@ -1,4 +1,4 @@
-/*package marenas.pe.service;
+package marenas.pe.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +14,11 @@ import marenas.pe.repository.IUsuarioCredentialRepository;
 @Service
 public class AuthService {
     @Autowired
-    private IUsuarioCredentialRepository repository;
+    private IUsuarioCredentialRepository repository; 
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder; //SpringSecurity
 
-    @Autowired
-    private JwtService jwtService;
 
     public String saveUser(UsuarioCredential credential) {
         try{
@@ -33,11 +31,4 @@ public class AuthService {
         }
     }
 
-    public String generateToken(String username) {
-        return jwtService.generateToken(username);
-    }
-
-    public void validateToken(String token) {
-        jwtService.validateToken(token);
-    }
-} */
+} 

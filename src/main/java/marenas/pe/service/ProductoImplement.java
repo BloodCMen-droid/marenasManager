@@ -36,4 +36,11 @@ public class ProductoImplement implements IProductoService {
 		return proRep.findById(id);
 	}
 
+	@Override
+	public List<Producto> findByCategoriaId(Long categoriaId) {
+		return proRep.getProductosByCategoria(categoriaId);
+	}
+
+	
+
 }

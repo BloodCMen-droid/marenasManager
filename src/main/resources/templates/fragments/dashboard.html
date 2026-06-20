@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <body>
 
 <nav class="sidebar" th:fragment="menu">
@@ -9,39 +11,61 @@
         <span>Sistema de Ventas</span>
     </div>
 
-    <a th:href="@{/}">
-        🏠 Dashboard
-    </a>
+    <div class="menu">
 
-    <a th:href="@{/listProductos}">
-        🍖 Productos
-    </a>
+        <a th:href="@{/index}">
+            🏠 Dashboard
+        </a>
 
-    <a th:href="@{/listCategorias}">
-        📋 Categorías
-    </a>
-    
-    <a th:href="@{/listRoles}">
-        📋 Roles
-    </a>
-    
-    <a th:href="@{/listMesas}">
-        🧾 Mesas
-    </a>
+        <a th:href="@{/listProductos}">
+            🍖 Productos
+        </a>
+        
+         <a th:href="@{/listInsumos}">
+            🍖 Insumos
+        </a>
 
-    <a th:href="@{/listPedidos}">
-        🧾 Pedidos
-    </a>
+        <a th:href="@{/listCategorias}">
+            📋 Categorías
+        </a>
 
-    <a th:href="@{/listEmpleados}">
-        👨‍🍳 Empleados
-    </a>
+        <a th:href="@{/listRoles}">
+            📋 Roles
+        </a>
 
-    <a th:href="@{/listReportes}">
-        📊 Reportes
-    </a>
+        <a th:href="@{/listMesas}">
+            🪑 Mesas
+        </a>
+
+        <a th:href="@{/newPedido}">
+            🧾 Registrar 
+            Pedidos
+        </a>
+
+        <a th:href="@{/listEmpleados}">
+            👨‍🍳 Empleados
+        </a>
+
+        <a th:href="@{/listReportes}">
+            📊 Reportes
+        </a>
+
+    </div>
+
+         <div class="sidebar-footer">
+         
+<div class="user-info">
+    Bienvenido:
+    <span sec:authentication="principal.nombreEmpleado"></span>
+</div>
+        <a th:href="@{/logout}" class="logout">
+            🚪 Cerrar Sesión
+        </a>
+
+    </div>
 
 </nav>
+
 
 </body>
 </html>

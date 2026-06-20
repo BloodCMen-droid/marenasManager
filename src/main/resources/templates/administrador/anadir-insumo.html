@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Añadir Stock</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/producto-form.css}">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div th:replace="~{fragments/dashboard :: menu}"></div>
+
+
+
+<div class="content">
+
+
+<div class="card">
+
+
+<h1>
+➕ Añadir Stock
+</h1>
+
+
+
+<form th:action="@{/saveStock}"
+      method="post">
+
+
+<input type="hidden"
+       name="id"
+       th:value="${insumo.id}">
+
+
+
+<div class="campo">
+
+<label>
+Insumo
+</label>
+
+
+<input type="text"
+       th:value="${insumo.nombre}"
+       readonly>
+
+</div>
+
+
+
+
+<div class="campo">
+
+<label>
+Stock Actual
+</label>
+
+
+<input type="number"
+       th:value="${insumo.stock}"
+       readonly>
+
+</div>
+
+
+
+
+
+<div class="campo">
+
+<label>
+Cantidad a agregar
+</label>
+
+
+<input type="number"
+       name="cantidad"
+       required>
+
+</div>
+
+
+
+
+<div class="acciones">
+
+
+<button type="submit">
+
+💾 Guardar
+
+</button>
+
+
+
+<a th:href="@{/listInsumos}">
+
+← Regresar
+
+</a>
+
+
+</div>
+
+
+
+</form>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -38,14 +38,18 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>telefono</th>
+                        <th>DNI</th>
+                        <th>Telefono</th>
+                        <th>Email</th>
                         <th>Rol</th>
                         <th>Acciones</th>
                     </tr>
 
                 </thead>
 
+
                 <tbody>
+
 
                     <tr th:if="${#lists.isEmpty(empleados)}">
 
@@ -55,28 +59,53 @@
 
                     </tr>
 
+
+
                     <tr th:each="e : ${empleados}">
+
 
                         <td th:text="${e.id}"></td>
 
+
                         <td th:text="${e.nombre}"></td>
-                       
+                        
+                         <td th:text="${e.dni}"></td>
+
+
                         <td>
+                        
+                        
                             +51
                             <span th:text="${e.telefono}"></span>
                         </td>
 
-                        <td th:text="${e.rol != null ? e.rol.nombre : 'No definido'}"></td>
+
+                        <!-- NUEVO: email desde UsuarioCredential -->
+                        <td th:text="${e.usuarioCredential != null ? 
+                            e.usuarioCredential.email : 'Sin usuario'}">
+                        </td>
+
+
+
+                        <!-- NUEVO: rol desde UsuarioCredential -->
+                        <td th:text="${e.usuarioCredential != null 
+                            && e.usuarioCredential.rol != null ? 
+                            e.usuarioCredential.rol.nombre : 'No definido'}">
+                        </td>
+
 
 
                         <td>
 
                             <div class="actions">
 
+
                                 <a class="btn editar"
                                 th:href="@{/editEmpleado/{id}(id=${e.id})}">
                                     ✏ Editar
                                 </a>
+
+
 
                                 <a class="btn eliminar"
                                 th:href="@{/deleteEmpleado/{id}(id=${e.id})}"
@@ -86,11 +115,14 @@
 
                                 </a>
 
+
                             </div>
 
                         </td>
 
+
                     </tr>
+
 
                 </tbody>
 
@@ -102,7 +134,9 @@
 
 </div>
 
+
 <script th:src="@{/js/dashboard.js}"></script>
+
 
 </body>
 

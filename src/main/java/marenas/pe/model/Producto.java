@@ -29,17 +29,42 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
+    
+    
+    
+    // OneToMany → Comprobante
+    @OneToMany(mappedBy = "producto")
+    private List<DetalleProductoInsumo> detallesInsumo;
  
 
-    // Constructores
+    
+
+	// Constructores
     public Producto() {}
  
-    public Producto(String nombre, String descripcion, BigDecimal precio, Categoria categoria) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.precio = precio;
-        this.categoria = categoria;
-    }
+ 
+    
+    
+    public Producto(String nombre, String descripcion, BigDecimal precio, Boolean activo, Categoria categoria,
+			List<DetalleProductoInsumo> detallesInsumo) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.activo = activo;
+		this.categoria = categoria;
+		this.detallesInsumo = detallesInsumo;
+	}
+
+
+
+
+	public List<DetalleProductoInsumo> getDetallesInsumo() {
+		return detallesInsumo;
+	}
+
+	public void setDetallesInsumo(List<DetalleProductoInsumo> detallesInsumo) {
+		this.detallesInsumo = detallesInsumo;
+	}
  
     // Getters y Setters
     public Long getId() { return id; }

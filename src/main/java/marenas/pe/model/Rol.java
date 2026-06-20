@@ -23,16 +23,16 @@ public class Rol {
     @Column(name = "nombre_rol")
     private String nombre; // ADMINISTRADOR, MESERO
     
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
-    private List<Empleado> empleado;
+
+    @OneToMany(mappedBy = "rol")
+    private List<UsuarioCredential> usuarios;
+
     
-
-
-
+    
 	public Rol(String nombre, List<Empleado> empleado) {
 
 		this.nombre = nombre;
-		this.empleado = empleado;
+
 	}
 
 	public Rol() {}

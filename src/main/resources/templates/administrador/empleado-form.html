@@ -5,7 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <title>Formulario Producto</title>
+    <title>Formulario Empleado</title>
 
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link rel="stylesheet" th:href="@{/css/producto-form.css}">
@@ -18,8 +18,8 @@
 
     <div th:replace="~{fragments/dashboard :: menu}"></div>
 
-    <div class="content">
 
+    <div class="content">
         <div class="card">
 
             <h1 th:text="${empleado.id == null ?
@@ -27,88 +27,118 @@
                 '✏ Editar Empleado'}">
             </h1>
 
+
+
             <form
                 th:action="@{/saveEmpleado}"
                 th:object="${empleado}"
                 method="post">
 
-                <!-- ID oculto para editar -->
-                <input  type="hidden" th:field="*{id}">
+
+                <input type="hidden" th:field="*{id}">
+
+
+                <!-- DATOS EMPLEADO -->
 
                 <div class="campo">
-
                     <label>Nombre</label>
-
                     <input
                         type="text"
                         th:field="*{nombre}"
                         required>
-
                 </div>
                 
                 <div class="campo">
+                    <label>DNI</label>
+                    <input
+                        type="text"
+                        th:field="*{dni}"
+                        required>
+                </div>
 
+
+                <div class="campo">
                     <label>Telefono</label>
-
                     <input
                         type="text"
                         th:field="*{telefono}"
                         required>
-
                 </div>
-                
+
+
+
+                <!-- DATOS USUARIO -->
+
+
+                <div class="campo">
+                    <label>Email</label>
+                    <input
+                        type="email"
+                        th:field="*{usuarioCredential.email}"
+                        required>
+                </div>
 
 
 
                 <div class="campo">
 
+                    <div th:if="${empleado.id == null}">
+    
+                          <label>Password</label>
+
+                             <input type="password" 
+                               th:field="*{usuarioCredential.password}"
+                           required>
+
+                     </div>
+                </div>
+
+
+
+                <!-- ROL -->
+
+
+                <div class="campo">
                     <label>Rol</label>
-
+                    
                     <select
-                        th:field="*{rol.id}">
-
+                        th:field="*{usuarioCredential.rol.id}">
                         <option value="">
-                            Seleccione Empleado
+                            Seleccione Rol
                         </option>
-
+                        
                         <option
                             th:each="r : ${roles}"
                             th:value="${r.id}"
                             th:text="${r.nombre}">
                         </option>
-
                     </select>
-
                 </div>
 
-              
+
+
 
                 <div class="acciones">
-
-                    <button type="submit">
+                   <button type="submit">
 
                         💾 Guardar
-
                     </button>
-
-                    <a
-                        th:href="@{/listProductos}">
-
+                    
+                    <a th:href="@{/listEmpleados}">
                         ← Regresar
-
                     </a>
-
+                    
                 </div>
-
             </form>
-
+            
         </div>
-
     </div>
 
 </div>
 
+
 <script th:src="@{/js/dashboard.js}"></script>
+
 
 </body>
 

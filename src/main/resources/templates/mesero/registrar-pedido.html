@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Agregar Pedido</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="card">
+
+
+          <form th:action="@{/saveDetalle}" method="post">
+
+
+    <label>Producto</label>
+
+    <select name="productoId">
+
+        <option 
+        th:each="p : ${productos}"
+        th:value="${p.id}"
+        th:text="${p.nombre}">
+        </option>
+
+    </select>
+
+
+
+    <label>Cantidad</label>
+
+    <input 
+    type="number"
+    name="cantidad"
+    value="1">
+
+
+
+    <label>Adicional</label>
+
+    <input 
+    type="text"
+    name="adicional">
+
+
+					<table>
+						<tr>
+							<th>Producto</th>
+							<th>Cantidad</th>
+							<th>Adicional</th>
+						</tr>
+						<tr th:each="d : ${detalleTemporal}">
+							<td th:text="${d.productoNombre}"></td>
+							<td th:text="${d.cantidad}"></td>
+							<td th:text="${d.adicional}"></td>
+						</tr>
+				 </table>
+		
+				 
+	<button type="submit">
+        Agregar
+    </button>
+
+
+    </form>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

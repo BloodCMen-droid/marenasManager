@@ -12,5 +12,6 @@ public interface IProductoService {
 	public Producto            createProdu(Producto producto);
 	public void              deleteProducto(Long id);
 	public Optional<Producto>  searchProducto(Long id);
+	List<Producto> findByCategoriaId(Long categoriaId);
 
 }

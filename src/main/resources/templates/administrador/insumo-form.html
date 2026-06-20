@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Formulario Insumo</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="card">
+
+            <h1 th:text="${insumo.id == null ?
+                '🍖 Nuevo Insumo' : '✏ Editar Insumo'}">
+            </h1>
+
+            <form th:action="@{/saveInsumo}"
+      th:object="${insumo}"
+      method="post">
+
+    <input type="hidden" th:field="*{id}">
+
+    <div class="campo">
+        <label>Nombre</label>
+        <input type="text"
+               th:field="*{nombre}"
+               required>
+    </div>
+
+    <div class="campo">
+        <label>Stock Actual</label>
+        <input type="number"
+               th:field="*{stock}"
+               required>
+    </div>
+
+    <div class="campo">
+        <label>Stock Mínimo</label>
+        <input type="number"
+               th:field="*{stockMinimo}"
+               required>
+    </div>
+
+    <div class="campo">
+        <label>Unidad de Medida</label>
+
+        <select th:field="*{unidadMedida}">
+            <option value="">Seleccione</option>
+            <option value="Kg">Kg</option>
+            <option value="Gr">Gr</option>
+            <option value="Litro">Litro</option>
+            <option value="Ml">Ml</option>
+            <option value="Unidad">Unidad</option>
+        </select>
+    </div>
+
+    
+<input type="hidden" th:field="*{estado}">
+
+    <div class="acciones">
+
+        <button type="submit">
+            💾 Guardar
+        </button>
+
+        <a th:href="@{/listInsumos}">
+            ← Regresar
+        </a>
+
+    </div>
+
+</form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>

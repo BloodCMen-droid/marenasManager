@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import marenas.pe.model.Empleado;
+import marenas.pe.service.AuthService;
 import marenas.pe.service.EmpleadoImplement;
 import marenas.pe.service.RolImplement;
 
@@ -19,6 +20,10 @@ public class EmpleadoController {
 	
 	@Autowired //IMPORTANTE!!!!
 	private RolImplement rolImp;
+	
+    
+    
+
 	
 	@GetMapping("/listEmpleados")
 	public String listarEmpleados(Model modelo) {

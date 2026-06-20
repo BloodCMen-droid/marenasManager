@@ -3,6 +3,7 @@ package marenas.pe.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,43 +15,58 @@ public class Pedido {
     @Column(name = "id_pedido")
     private Long id;
 
-    @Column(name = "fechaHora_pedido",nullable = false)
+    @Column(name = "fechaHora_pedido", nullable = false)
     private LocalDateTime fechaHora;
 
-    // abierto | en_preparacion | cerrado
-    @Column(name = "estado_pedido" ,nullable = false, length = 20)
+    @Column(name = "estado_pedido", nullable = false, length = 20)
     private String estado = "abierto";
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "total", precision = 10, scale = 2, nullable = false)
     private BigDecimal total = BigDecimal.ZERO;
 
-   
+    // ==================== RELACIONES ====================
 
-    // ManyToOne → Empleado
     @ManyToOne
-    @JoinColumn(name = "empleado_id")
-    private Empleado empleado;
-    
-    
-    // ManyToOne → Mesa
-    @ManyToOne
-    @JoinColumn(name = "mesa_id")
+    @JoinColumn(name = "mesa_id", nullable = false)
     private Mesa mesa;
-    
 
-    // OneToMany → DetallePedido
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetallePedido> detalles;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UsuarioCredential usuarioCredential;
 
-    // OneToOne → Comprobante
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<DetallePedido> detalles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<Demora> demoras = new ArrayList<>();
 
-    // Constructores
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private Factura factura;
+
+    // ==================== CONSTRUCTOR ====================
+
     public Pedido() {
         this.fechaHora = LocalDateTime.now();
+        this.detalles = new ArrayList<>();
+        this.demoras = new ArrayList<>();
     }
 
-    // Getters y Setters
+    // ==================== MÉTODO PARA CALCULAR TOTAL ====================
+
+    public void calcularTotal() {
+        if (detalles == null || detalles.isEmpty()) {
+            this.total = BigDecimal.ZERO;
+            return;
+        }
+
+        this.total = detalles.stream()
+                .map(detalle -> detalle.getProducto().getPrecio()
+                        .multiply(BigDecimal.valueOf(detalle.getCantidad())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    // ==================== GETTERS Y SETTERS ====================
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -63,13 +79,24 @@ public class Pedido {
     public BigDecimal getTotal() { return total; }
     public void setTotal(BigDecimal total) { this.total = total; }
 
-   
+    public Mesa getMesa() { return mesa; }
+    public void setMesa(Mesa mesa) { this.mesa = mesa; }
 
-    public Empleado getEmpleado() { return empleado; }
-    public void setEmpleado(Empleado empleado) { this.empleado = empleado; }
+    public UsuarioCredential getUsuarioCredential() { return usuarioCredential; }
+    public void setUsuarioCredential(UsuarioCredential usuarioCredential) { 
+        this.usuarioCredential = usuarioCredential; 
+    }
 
     public List<DetallePedido> getDetalles() { return detalles; }
-    public void setDetalles(List<DetallePedido> detalles) { this.detalles = detalles; }
+    public void setDetalles(List<DetallePedido> detalles) { 
+        this.detalles = detalles != null ? detalles : new ArrayList<>(); 
+    }
 
-    
+    public List<Demora> getDemoras() { return demoras; }
+    public void setDemoras(List<Demora> demoras) { 
+        this.demoras = demoras != null ? demoras : new ArrayList<>(); 
+    }
+
+    public Factura getFactura() { return factura; }
+    public void setFactura(Factura factura) { this.factura = factura; }
 }

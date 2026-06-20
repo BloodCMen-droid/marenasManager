@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+
+<title>Mantenimiento Insumo</title>
+
+<link rel="stylesheet" th:href="@{/css/dashboard.css}">
+<link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="fragments/dashboard :: menu"></div>
+
+    <div class="content">
+
+        <div class="header">
+
+            <h1>🍖 Insumo</h1>
+
+            <a th:href="@{/newInsumo}" class="btn-create">
+                + Crear Insumo
+            </a>
+
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+               <thead>
+
+<tr>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>Stock</th>
+    <th>Stock Mínimo</th>
+    <th>Unidad</th>
+    <th>Estado</th>
+    <th>Acciones</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr th:if="${#lists.isEmpty(insumos)}">
+    <td colspan="7">
+        No existen insumos registrados
+    </td>
+</tr>
+
+<tr th:each="i : ${insumos}">
+
+    <td th:text="${i.id}"></td>
+
+    <td th:text="${i.nombre}"></td>
+
+    <td th:text="${i.stock}"></td>
+
+    <td th:text="${i.stockMinimo}"></td>
+
+    <td th:text="${i.unidadMedida}"></td>
+
+    <td th:text="${i.estado}"></td>
+    <td>
+
+        <div class="actions">
+
+            <a class="btn editar"
+               th:href="@{/editInsumo/{id}(id=${i.id})}">
+                ✏ Editar
+            </a>
+             <a class="btn"
+                th:href="@{/addStock/{id}(id=${i.id})}">
+                ➕ Añadir Stock
+             </a>
+
+            <a class="btn eliminar"
+               th:href="@{/deleteInsumo/{id}(id=${i.id})}"
+               onclick="return confirm('¿Eliminar Insumo?')">
+
+                🗑 Eliminar
+
+            </a>
+
+        </div>
+
+    </td>
+
+</tr>
+
+</tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+
+</body>
+
+</html>
