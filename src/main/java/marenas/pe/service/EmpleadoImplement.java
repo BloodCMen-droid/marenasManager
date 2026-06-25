@@ -30,16 +30,20 @@ public class EmpleadoImplement implements IEmpleadoService{
 		return empRepo.findAll();
 	}
 
+	
 	@Override
-	public Empleado createEmple(Empleado empleado){
-
-	    UsuarioCredential usuario = empleado.getUsuarioCredential();
-	    usuario.setPassword(
-	            passwordEncoder.encode(usuario.getPassword())
-	        );
-	   
-	    return empRepo.save(empleado);
+	public Empleado createEmple(Empleado empleado) {
+	    try {
+	        UsuarioCredential usuario = empleado.getUsuarioCredential();
+	        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+	        return empRepo.save(empleado);
+	    } catch (Exception e) {
+	        System.out.println("Error: " + e.getMessage());
+	        return null; // retorna null en caso de error
+	    }
 	}
+	
+	
 	@Override
 	public void deleteEmpleado(Long id) {
 		empRepo.deleteById(id);

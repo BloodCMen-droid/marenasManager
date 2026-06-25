@@ -1,11 +1,13 @@
 package marenas.pe.config;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import marenas.pe.model.UsuarioCredential;
 
 import java.util.Collection;
+import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -17,7 +19,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return java.util.Collections.emptyList();
+    	String nombreRol = usuarioCredential.getRol().getNombre();
+        return List.of(new SimpleGrantedAuthority(nombreRol));
     }
 
     @Override
@@ -32,6 +35,10 @@ public class CustomUserDetails implements UserDetails {
 
     public String getNombreEmpleado() {
         return usuarioCredential.getEmpleado().getNombre();
+    }
+    
+    public UsuarioCredential getUsuarioCredential() {
+        return usuarioCredential;
     }
 
     @Override

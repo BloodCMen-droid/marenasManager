@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <!-- INSUMOS -->
+        <div class="header">
+            <h1>📦 Gestión de Inventario</h1>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Stock Actual</th>
+                        <th>Stock Mínimo</th>
+                        <th>Unidad</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(insumos)}">
+                        <td colspan="6">No hay insumos registrados</td>
+                    </tr>
+                    <tr th:each="i : ${insumos}">
+                        <td th:text="${i.nombre}"></td>
+                        <td th:text="${i.stock}"></td>
+                        <td th:text="${i.stockMinimo}"></td>
+                        <td th:text="${i.unidadMedida}"></td>
+                        <td>
+                            <span th:text="${i.estado}"
+                                  th:style="${i.estado == 'DISPONIBLE'} ? 'color:green' :
+                                             (${i.estado == 'BAJO STOCK'} ? 'color:orange' :
+                                             (${i.estado == 'CRÍTICO'} ? 'color:red' : 'color:darkred'))">
+                            </span>
+                        </td>
+                        <td>
+                            <a class="btn-create"
+                               th:href="@{/inventario/addStock/{id}(id=${i.id})}">
+                                ➕ Agregar Stock
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <!-- LISTA DE COMPRAS -->
+        <div class="header">
+            <h2>🛒 Lista de Compras</h2>
+            <a class="btn-create" th:href="@{/inventario/exportarCompras}">
+                📄 Exportar PDF
+            </a>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Stock Actual</th>
+                        <th>Stock Mínimo</th>
+                        <th>Unidad</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(listaCompras)}">
+                        <td colspan="5">No hay insumos críticos o agotados</td>
+                    </tr>
+                    <tr th:each="i : ${listaCompras}">
+                        <td th:text="${i.nombre}"></td>
+                        <td th:text="${i.stock}"></td>
+                        <td th:text="${i.stockMinimo}"></td>
+                        <td th:text="${i.unidadMedida}"></td>
+                        <td>
+                            <span th:text="${i.estado}"
+                                  th:style="${i.estado == 'CRÍTICO'} ? 'color:red' : 'color:darkred'">
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Pedido</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <h1>🧾 Detalle Pedido #<span th:text="${pedido.id}"></span></h1>
+
+				<p th:if="${param.error != null}"
+					style="color: red; font-weight: bold">⚠ Este pedido ya tiene
+					una factura generada</p>
+					 
+				<!-- INFO PEDIDO -->
+            <div class="section">
+                <p><strong>Mesa:</strong> <span th:text="${pedido.mesa.numero}"></span></p>
+                <p><strong>Mesero:</strong> <span th:text="${pedido.usuarioCredential?.empleado?.nombre}"></span></p>
+                <p><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaHora, 'dd/MM/yyyy HH:mm')}"></span></p>
+                <p><strong>Estado:</strong> <span th:text="${pedido.estado}"></span></p>
+            </div>
+
+            <hr>
+
+            <!-- PRODUCTOS -->
+            <div class="section">
+                <h2>Productos</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unit.</th>
+                            <th>Subtotal</th>
+                            <th>Adicional</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="d : ${pedido.detalles}">
+                            <td th:text="${d.producto.nombre}"></td>
+                            <td th:text="${d.cantidad}"></td>
+                            <td th:text="${d.producto.precio}"></td>
+                            <td th:text="${d.producto.precio * d.cantidad}"></td>
+                            <td th:text="${d.adicional}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <!-- TOTALES PREVIEW -->
+            <div class="section">
+                <p><strong>Subtotal:</strong> S/ <span th:text="${pedido.total}"></span></p>
+            </div>
+
+            <hr>
+
+            <!-- BOTONES -->
+            <div class="section">
+                <a class="btn-create" th:href="@{/cajero/pagar/{id}(id=${pedido.id})}">
+                    💳 Proceder al Pago
+                </a>
+                <a class="btn editar" th:href="@{/cajero}">
+                    ← Volver
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

@@ -1,13 +1,26 @@
 package marenas.pe.service;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import marenas.pe.dto.ListaCompraDTO;
 import marenas.pe.model.Insumo;
 import marenas.pe.repository.IInsumoRepository;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 
 @Service
 public class InsumoImplement implements IInsumoService {
@@ -69,6 +82,37 @@ public class InsumoImplement implements IInsumoService {
 	        }	
 	}
 
+	
+	@Override
+	public byte[] exportarListaCompras() throws Exception {
+
+	    List<ListaCompraDTO> lista = insuRepo.findAll()
+	        .stream()
+	        .filter(i -> i.getEstado().equals("CRÍTICO") 
+	                  || i.getEstado().equals("AGOTADO"))
+	        .map(i -> new ListaCompraDTO(
+	            i.getNombre(),
+	            i.getUnidadMedida(),
+	            i.getStock(),
+	            i.getStockMinimo()
+	        ))
+	        .collect(Collectors.toList());
+
+	    File file = ResourceUtils.getFile("classpath:listaCompras.jrxml");
+	    JasperReport jasperReport = JasperCompileManager
+	        .compileReport(file.getAbsolutePath());
+
+	    JRBeanCollectionDataSource dataSource = 
+	        new JRBeanCollectionDataSource(lista);
+
+	    Map<String, Object> parameters = new HashMap<>();
+
+	    // ← AQUÍ EL FIX, usa el dataSource directamente, no JREmptyDataSource
+	    JasperPrint jasperPrint = JasperFillManager
+	        .fillReport(jasperReport, parameters, dataSource);
+
+	    return JasperExportManager.exportReportToPdf(jasperPrint);
+	}
 	
 	 
 

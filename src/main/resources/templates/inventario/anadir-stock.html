@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Stock</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <h1>➕ Agregar Stock</h1>
+
+            <!-- INFO INSUMO -->
+            <div class="section">
+                <p><strong>Insumo:</strong> <span th:text="${insumo.nombre}"></span></p>
+                <p><strong>Stock Actual:</strong> <span th:text="${insumo.stock}"></span> 
+                   <span th:text="${insumo.unidadMedida}"></span></p>
+                <p><strong>Stock Mínimo:</strong> <span th:text="${insumo.stockMinimo}"></span></p>
+                <p><strong>Estado:</strong> <span th:text="${insumo.estado}"></span></p>
+            </div>
+
+            <hr>
+
+            <!-- FORM -->
+            <form th:action="@{/inventario/saveStock}" method="post">
+                <input type="hidden" name="id" th:value="${insumo.id}">
+
+                <div class="campo">
+                    <label>Cantidad a agregar</label>
+                    <input type="number" name="cantidad" min="1" required
+                           placeholder="Ej: 50">
+                </div>
+
+                <button type="submit" class="btn-create">
+                    ✅ Guardar Stock
+                </button>
+                <a class="btn editar" th:href="@{/inventario}">
+                    ← Volver
+                </a>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

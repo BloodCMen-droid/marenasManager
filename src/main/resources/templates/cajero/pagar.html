@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Pago</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <h1>💳 Registrar Pago — Pedido #<span th:text="${pedido.id}"></span></h1>
+
+            <form th:action="@{/cajero/registrarPago}" method="post">
+
+                <input type="hidden" name="pedidoId" th:value="${pedido.id}">
+
+                <!-- DATOS DEL CLIENTE -->
+                <div class="section">
+                    <h2>Datos del Cliente</h2>
+
+                    <div class="campo">
+                        <label>DNI *</label>
+                        <input type="text" name="dni" 
+                               placeholder="Ingrese DNI para buscar o crear cliente"
+                               required>
+                    </div>
+
+                    <div class="campo">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre"
+                               placeholder="Nombre completo"
+                               required>
+                    </div>
+
+                    <div class="campo">
+                        <label>Teléfono</label>
+                        <input type="text" name="telefono"
+                               placeholder="Opcional">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- RESUMEN DE PAGO -->
+                <div class="section">
+                    <h2>Resumen</h2>
+                    <p><strong>Subtotal:</strong> S/ <span th:text="${subtotal}"></span></p>
+                    <p><strong>IGV (18%):</strong> S/ <span th:text="${igv}"></span></p>
+                    <p><strong>Total a Pagar:</strong> S/ <span th:text="${totalFinal}"></span></p>
+                </div>
+
+                <hr>
+
+                <!-- MÉTODO DE PAGO -->
+                <div class="section">
+                    <h2>Método de Pago</h2>
+                    <div class="campo">
+                        <label>Seleccione método</label>
+                        <select name="metodoPago" required>
+                            <option value="">Seleccione...</option>
+                            <option value="EFECTIVO">💵 Efectivo</option>
+                            <option value="TARJETA">💳 Tarjeta</option>
+                            <option value="YAPE">📱 Yape</option>
+                            <option value="PLIN">📱 Plin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr>
+
+                <button type="submit" class="btn-create">
+                    ✅ Registrar Pago y Generar Factura
+                </button>
+                <a class="btn editar" th:href="@{/cajero/detalle/{id}(id=${pedido.id})}">
+                    ← Volver
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

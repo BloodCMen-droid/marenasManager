@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Pedido</title>
+
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="card">
+
+            <h1>Detalle Pedido</h1>
+
+            <!-- DATOS PEDIDO -->
+
+            <div class="section">
+
+                <h2>Información</h2>
+
+                <p>
+                    <strong>Pedido:</strong>
+                    <span th:text="${pedido.id}"></span>
+                </p>
+                
+                <<p>
+                  <strong>Mesero:</strong>
+                   <span th:text="${pedido.usuarioCredential?.empleado?.nombre}"></span>
+                </p>
+
+                <p>
+                    <strong>Mesa:</strong>
+                    <span th:text="${pedido.mesa.numero}"></span>
+                </p>
+
+                <p>
+                    <strong>Estado:</strong>
+                    <span th:text="${pedido.estado}"></span>
+                </p>
+
+            </div>
+
+            <hr>
+
+            <!-- DETALLES EXISTENTES -->
+
+            <div class="section">
+
+                <h2>Productos Registrados</h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Adicional</th>
+                            <th>Acción</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="d : ${pedido.detalles}">
+
+                            <td th:text="${d.producto.nombre}"></td>
+
+                            <td th:text="${d.cantidad}"></td>
+
+                            <td th:text="${d.producto.precio}"></td>
+
+                            <td th:text="${d.producto.precio * d.cantidad}"></td>
+
+                            <td th:text="${d.adicional}"></td>
+
+                            <td>
+
+                              <a class="btn eliminar"
+th:href="@{/eliminarDetallePedido/{id}(id=${d.id})}"
+onclick="return confirm('¿Quitar producto del pedido?')">
+
+🗑 Quitar
+
+</a>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <hr>
+
+            <!-- AGREGAR NUEVO PRODUCTO -->
+
+            <div class="section">
+
+                <h2>Agregar Producto</h2>
+
+                <form th:action="@{/saveDetallePedido}" method="post">
+
+                    <input type="hidden"
+                           name="pedidoId"
+                           th:value="${pedido.id}">
+
+                    <label>Categoría</label>
+
+                    <select id="categoriaFiltro">
+
+                        <option value="">Todas</option>
+
+                        <option th:each="c:${categorias}"
+                                th:value="${c.id}"
+                                th:text="${c.nombre}">
+                        </option>
+
+                    </select>
+
+                    <label>Producto</label>
+
+                    <select name="productoId"
+                            id="productoSelect">
+
+                        <option th:each="p:${productos}"
+                                th:value="${p.id}"
+                                th:data-categoria="${p.categoria.id}"
+                                th:text="${p.nombre}">
+                        </option>
+
+                    </select>
+
+                    <label>Cantidad</label>
+
+                    <input type="number"
+                           name="cantidad"
+                           value="1"
+                           min="1">
+
+                    <label>Adicional</label>
+
+                    <input type="text"
+                           name="adicional">
+
+                    <button type="submit"
+                            class="btn-create">
+
+                        Agregar Producto
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            <hr>
+
+            <a class="btn-create"
+               th:href="@{/pedidos}">
+
+                Volver
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+<!-- SCRIPT INLINE (filtrado por categoría) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const categoriaFiltro = document.getElementById("categoriaFiltro");
+            const productoSelect = document.getElementById("productoSelect");
+
+            if (categoriaFiltro && productoSelect) {
+                categoriaFiltro.addEventListener("change", function() {
+                    const categoria = this.value;
+                    const opciones = productoSelect.querySelectorAll("option");
+
+                    opciones.forEach(function(op) {
+                        if (categoria === "" || op.dataset.categoria === categoria) {
+                            op.style.display = "block";
+                        } else {
+                            op.style.display = "none";
+                        }
+                    });
+
+                    // Limpiar selección
+                    productoSelect.value = "";
+                });
+            }
+        });
+    </script>
+
+
+</body>
+</html> 

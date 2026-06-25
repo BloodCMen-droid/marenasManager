@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import marenas.pe.config.CustomUserDetails;
 
 @Controller
-public class UsuarioController {
+public class LoginController {
 
 
     @GetMapping("/")

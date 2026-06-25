@@ -9,7 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+ 
 @Entity
 @Table(name = "tbl_cliente")
 public class Cliente {
@@ -23,7 +23,7 @@ public class Cliente {
 	@Column(name = "nombre_cliente", nullable = false  )
 	private String nombre;
 
-	@Column(name = "dni_cliente", nullable = false  )
+	@Column(name = "dni_cliente", nullable = false, unique= true  )
 	private String dni;
 
 	@Column(name = "telefono_cliente" )

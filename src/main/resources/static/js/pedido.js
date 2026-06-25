@@ -1,18 +1,18 @@
-document
-.getElementById("categoriaFiltro")
-.addEventListener("change",function(){
+document.addEventListener("DOMContentLoaded", function() {
+    const categoriaFiltro = document.getElementById("categoriaFiltro");
+    
+    if (categoriaFiltro) {
+        categoriaFiltro.addEventListener("change", function() {
+            const categoria = this.value;
+            const opciones = document.querySelectorAll("#productoSelect option");
 
-
-let categoria=this.value;
-let productos=document.querySelectorAll("#productoSelect option");
-productos.forEach(p=>{
-
-if(categoria=="" || p.dataset.categoria==categoria){
-   p.style.display="block";
-}else{
-    p.style.display="none";
-}
-
-});
-
+            opciones.forEach(op => {
+                if (categoria === "" || op.dataset.categoria === categoria) {
+                    op.style.display = "block";
+                } else {
+                    op.style.display = "none";
+                }
+            });
+        });
+    }
 });

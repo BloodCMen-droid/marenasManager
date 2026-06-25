@@ -21,6 +21,10 @@ public class Demora {
 
 
     private LocalDateTime fecha;
+    
+    @Column(name = "estado")
+    private String estado = "PENDIENTE"; // PENDIENTE → NOTIFICADO
+
 
 
     @ManyToOne
@@ -43,17 +47,33 @@ public class Demora {
     }
 
 
-    public Integer getTiempoMinutos(){
-        return tiempoMinutos;
-    }
+   
+
+    public Integer getTiempoMinutos() {
+		return tiempoMinutos;
+	}
 
 
-    public void setTiempoMinutos(Integer tiempoMinutos){
-        this.tiempoMinutos=tiempoMinutos;
-    }
+
+	public void setTiempoMinutos(Integer tiempoMinutos) {
+		this.tiempoMinutos = tiempoMinutos;
+	}
 
 
-    public String getMotivo(){
+
+	public String getEstado() {
+		return estado;
+	}
+
+
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+
+
+	public String getMotivo(){
         return motivo;
     }
 

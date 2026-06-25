@@ -14,43 +14,70 @@
         <div class="card">
             <h1>🍖 Registrar Pedido</h1>
 
-            <!-- DATOS DEL PEDIDO -->
+            <!-- ================================ -->
+            <!-- DATOS DEL PEDIDO                 -->
+            <!-- Muestra mesero y selector de mesa-->
+            <!-- ================================ -->
             <div class="section">
                 <h2>Datos del Pedido</h2>
-                <form th:action="@{/savePedido}" method="post" id="formPedido">
-                    <div class="campo">
-                        <label>Mesa</label>
-                        <select name="mesaId">
-                            <option value="">Seleccione mesa</option>
-                            <option th:each="m : ${mesas}" th:value="${m.id}" th:text="${m.numero}"></option>
-                        </select>
-                    </div>
-                    <input type="hidden" name="usuarioId" value="1">
-                </form>
+
+                <!-- Usuario logueado (solo lectura) -->
+                <p>
+                    <strong>Mesero:</strong>
+                    <span th:text="${usuarioNombre}"></span>
+                </p>
+
+                <!-- Select de mesa — el mesaId viaja 
+                     dentro del form de saveDetalle 
+                     para guardarse en sesión -->
+                <div class="campo">
+                    <label>Mesa</label>
+                    <select id="mesaSelect">
+                        <option value="">Seleccione mesa</option>
+                        <option th:each="m : ${mesas}"
+                                th:value="${m.id}"
+                                th:text="${m.numero}"
+                                th:selected="${m.id == mesaSeleccionada}">
+                        </option>
+                    </select>
+                </div>
             </div>
 
             <hr>
 
-            <!-- AGREGAR PRODUCTO -->
+            <!-- ================================ -->
+            <!-- AGREGAR PRODUCTO                 -->
+            <!-- Al hacer submit también envía    -->
+            <!-- el mesaId para guardarlo en      -->
+            <!-- sesión y no perderlo             -->
+            <!-- ================================ -->
             <div class="section">
                 <h2>Agregar Productos</h2>
                 <form th:action="@{/saveDetalle}" method="post" id="formDetalle">
+
+                    <!-- Mesa viaja aquí para guardarse en sesión -->
+                    <input type="hidden" name="mesaId" id="mesaIdHidden"
+                           th:value="${mesaSeleccionada}">
 
                     <div class="campo">
                         <label>Categoría</label>
                         <select id="categoriaFiltro">
                             <option value="">Todas</option>
-                            <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nombre}"></option>
+                            <option th:each="c : ${categorias}"
+                                    th:value="${c.id}"
+                                    th:text="${c.nombre}">
+                            </option>
                         </select>
                     </div>
 
                     <div class="campo">
                         <label>Producto</label>
                         <select name="productoId" id="productoSelect">
-                            <option th:each="p : ${productos}" 
-                                    th:value="${p.id}" 
+                            <option th:each="p : ${productos}"
+                                    th:value="${p.id}"
                                     th:data-categoria="${p.categoria.id}"
-                                    th:text="${p.nombre}"></option>
+                                    th:text="${p.nombre}">
+                            </option>
                         </select>
                     </div>
 
@@ -61,53 +88,76 @@
 
                     <div class="campo">
                         <label>Adicional</label>
-                        <input type="text" name="adicional" placeholder="Ej: sin cebolla, bien cocido...">
+                        <input type="text" name="adicional"
+                               placeholder="Ej: sin cebolla, bien cocido...">
                     </div>
 
-                    <button type="submit" class="btn-create">Agregar producto</button>
+                    <button type="submit" class="btn-create">
+                        Agregar producto
+                    </button>
                 </form>
             </div>
 
             <hr>
 
-            <!-- DETALLE TEMPORAL -->
+            <!-- ================================ -->
+            <!-- DETALLE TEMPORAL                 -->
+            <!-- Lista de productos agregados     -->
+            <!-- antes de guardar el pedido       -->
+            <!-- ================================ -->
             <div class="section">
                 <h2>Detalle del Pedido</h2>
                 <table class="table-detalle">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Subtotal</th>
-                <th>Adicional</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="d, iter : ${detalleTemporal}">
-                <td th:text="${d.productoNombre}"></td>
-                <td th:text="${d.cantidad}"></td>
-                <td th:text="${d.precio}"></td>
-                <td th:text="${d.subtotal}"></td>
-                <td th:text="${d.adicional}"></td>
-                <td>
-                    <a class="btn eliminar" 
-                       th:href="@{/deleteDetalle/{id}(id=${d.idTemporal})}">
-                        🗑 Quitar
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Adicional</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Mensaje si no hay productos agregados -->
+                        <tr th:if="${#lists.isEmpty(detalleTemporal)}">
+                            <td colspan="6">No hay productos agregados aún</td>
+                        </tr>
+
+                        <!-- Lista de productos temporales -->
+                        <tr th:each="d : ${detalleTemporal}">
+                            <td th:text="${d.productoNombre}"></td>
+                            <td th:text="${d.cantidad}"></td>
+                            <td th:text="${d.precio}"></td>
+                            <td th:text="${d.subtotal}"></td>
+                            <td th:text="${d.adicional}"></td>
+                            <td>
+                                <!-- Quitar producto de la lista temporal -->
+                                <a class="btn eliminar"
+                                   th:href="@{/deleteDetalle/{id}(id=${d.idTemporal})}">
+                                    🗑 Quitar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <!-- GUARDAR PEDIDO -->
+            <hr>
+
+            <!-- ================================ -->
+            <!-- GUARDAR PEDIDO                   -->
+            <!-- Envía mesaId desde sesión y      -->
+            <!-- registra todo en BD              -->
+            <!-- ================================ -->
             <div class="section mt-4">
                 <form th:action="@{/savePedido}" method="post">
-                    <input type="hidden" name="mesaId" value="1">
-                    <input type="hidden" name="usuarioId" value="1">
-                    <button type="submit" class="btn-create">💾 Guardar Pedido</button>
+                    <!-- Mesa tomada de la sesión -->
+                    <input type="hidden" name="mesaId"
+                           th:value="${mesaSeleccionada}">
+                    <button type="submit" class="btn-create">
+                        💾 Guardar Pedido
+                    </button>
                 </form>
             </div>
 
@@ -115,22 +165,40 @@
     </div>
 </div>
 
-<!-- SCRIPT DE FILTRADO -->
+<script th:src="@{/js/dashboard.js}"></script>
 <script>
-    document.getElementById("categoriaFiltro").addEventListener("change", function() {
-        const categoriaSeleccionada = this.value;
-        const opciones = document.querySelectorAll("#productoSelect option");
+    document.addEventListener("DOMContentLoaded", function() {
 
-        opciones.forEach(opcion => {
-            if (categoriaSeleccionada === "" || opcion.dataset.categoria === categoriaSeleccionada) {
-                opcion.style.display = "block";
-            } else {
-                opcion.style.display = "none";
-            }
-        });
+        const mesaSelect = document.getElementById("mesaSelect");
+        const mesaIdHidden = document.getElementById("mesaIdHidden");
+        const categoriaFiltro = document.getElementById("categoriaFiltro");
+        const productoSelect = document.getElementById("productoSelect");
 
-        // Limpiar selección actual
-        document.getElementById("productoSelect").value = "";
+        // Cuando cambia la mesa, actualiza el hidden
+        // para que viaje en el form de saveDetalle
+        if(mesaSelect && mesaIdHidden){
+            mesaSelect.addEventListener("change", function(){
+                mesaIdHidden.value = this.value;
+            });
+        }
+
+        // Filtrado de productos por categoría
+        if(categoriaFiltro && productoSelect){
+            categoriaFiltro.addEventListener("change", function(){
+                const categoria = this.value;
+                const opciones = productoSelect.querySelectorAll("option");
+
+                opciones.forEach(function(op){
+                    if(categoria === "" || op.dataset.categoria === categoria){
+                        op.style.display = "block";
+                    } else {
+                        op.style.display = "none";
+                    }
+                });
+
+                productoSelect.value = "";
+            });
+        }
     });
 </script>
 </body>

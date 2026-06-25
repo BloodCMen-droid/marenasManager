@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Receta Producto</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <h1>🧾 Receta — <span th:text="${producto.nombre}"></span></h1>
+
+            <!-- INSUMOS ACTUALES -->
+            <div class="section">
+                <h2>Insumos de la receta</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                            <th>Unidad</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(receta)}">
+                            <td colspan="4">No hay insumos asignados</td>
+                        </tr>
+                        <tr th:each="r : ${receta}">
+                            <td th:text="${r.insumo.nombre}"></td>
+                            <td th:text="${r.gasto}"></td>
+                            <td th:text="${r.insumo.unidadMedida}"></td>
+                            <td>
+                                <a class="btn eliminar"
+                                   th:href="@{/deleteReceta/{id}/{productoId}(id=${r.id},productoId=${producto.id})}"
+                                   onclick="return confirm('¿Quitar insumo?')">
+                                    🗑 Quitar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <!-- AGREGAR INSUMO -->
+            <div class="section">
+                <h2>Agregar Insumo</h2>
+                <form th:action="@{/saveReceta}" method="post">
+                    <input type="hidden" name="productoId" th:value="${producto.id}">
+
+                    <div class="campo">
+                        <label>Insumo</label>
+                        <select name="insumoId" required>
+                            <option value="">Seleccione insumo</option>
+                            <option th:each="i : ${insumos}"
+                                    th:value="${i.id}"
+                                    th:text="${i.nombre} + ' (' + ${i.unidadMedida} + ')'">
+                            </option>
+                        </select>
+                    </div>
+
+                   <input type="number" name="gasto" step="0.01" min="0.01" required
+                    placeholder="Ej: 0.2 (200g si unidad es Kg)">
+
+                    <button type="submit" class="btn-create">
+                        ➕ Agregar Insumo
+                    </button>
+                </form>
+            </div>
+
+            <hr>
+
+            <a class="btn editar" th:href="@{/listProductos}">
+                ← Volver a Productos
+            </a>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

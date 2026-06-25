@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demoras</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <h1>⏱ Demoras — Pedido #<span th:text="${pedido.id}"></span></h1>
+            <p><strong>Mesa:</strong> <span th:text="${pedido.mesa.numero}"></span></p>
+            <p><strong>Estado pedido:</strong> <span th:text="${pedido.estado}"></span></p>
+
+            <hr>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Motivo</th>
+                        <th>Minutos</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sin demoras -->
+                    <tr th:if="${#lists.isEmpty(demoras)}">
+                        <td colspan="5">No hay demoras para este pedido</td>
+                    </tr>
+
+                    <!-- Lista demoras -->
+                    <tr th:each="dem : ${demoras}">
+                        <td th:text="${dem.motivo}"></td>
+                        <td th:text="${dem.tiempoMinutos}"></td>
+                        <td th:text="${#temporals.format(dem.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:text="${dem.estado}"
+                                  th:style="${dem.estado == 'NOTIFICADO'} 
+                                             ? 'color:green' 
+                                             : 'color:orange'">
+                            </span>
+                        </td>
+                        <td>
+                            <!-- Solo si está PENDIENTE puede notificar -->
+                            <a th:if="${dem.estado == 'PENDIENTE'}"
+                               class="btn-create"
+                               th:href="@{/notificarDemora/{id}(id=${dem.id})}">
+                                📢 Notificar Cliente
+                            </a>
+                            <span th:if="${dem.estado == 'NOTIFICADO'}">
+                                ✔ Notificado
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+            <a class="btn-create" th:href="@{/pedidos}">← Volver</a>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

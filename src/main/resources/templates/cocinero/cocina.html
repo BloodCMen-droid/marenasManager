@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cocina</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+
+        <div class="header">
+            <h1>👨‍🍳 Cocina — Pedidos Pendientes</h1>
+        </div>
+
+        <!-- Mensaje si no hay pedidos -->
+        <div th:if="${#lists.isEmpty(pedidos)}">
+            <p>No hay pedidos pendientes.</p>
+        </div>
+
+        <!-- Un card por cada pedido -->
+        <div th:each="pedido : ${pedidos}" class="card">
+
+            <!-- INFO DEL PEDIDO -->
+            <h2>
+                Pedido #<span th:text="${pedido.id}"></span>
+                — Mesa <span th:text="${pedido.mesa.numero}"></span>
+            </h2>
+            <p>
+                <strong>Mesero:</strong>
+                <span th:text="${pedido.usuarioCredential?.empleado?.nombre}"></span>
+            </p>
+            <p>
+                <strong>Hora:</strong>
+                <span th:text="${#temporals.format(pedido.fechaHora, 'dd/MM/yyyy HH:mm')}"></span>
+            </p>
+
+            <!-- DETALLES DEL PEDIDO -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Adicional</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${pedido.detalles}">
+                        <td th:text="${d.producto.nombre}"></td>
+                        <td th:text="${d.cantidad}"></td>
+                        <td th:text="${d.adicional}"></td>
+                        <td>
+                            <!-- Verde si está preparado, rojo si pendiente -->
+                            <span th:text="${d.estadoDProducto}"
+                                  th:style="${d.estadoDProducto == 'PREPARADO'} 
+                                             ? 'color:green' 
+                                             : 'color:red'">
+                            </span>
+                        </td>
+                        <td>
+                            <!-- Solo muestra botón si está PENDIENTE -->
+                            <a th:if="${d.estadoDProducto == 'PENDIENTE'}"
+                               class="btn-create"
+                               th:href="@{/prepararDetalle/{id}(id=${d.id})}">
+                                ✅ Marcar Preparado  
+                            </a>
+                            
+                             <!-- Dentro de cada card de pedido -->
+						   <a class="btn-create"
+								th:href="@{/cocinaPedido/{id}(id=${pedido.id})}"> 👁 Ver
+									Detalle 
+							</a> 
+							<!-- Si ya está preparado muestra texto -->
+                            <span th:if="${d.estadoDProducto == 'PREPARADO'}">
+                                ✔ Listo
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

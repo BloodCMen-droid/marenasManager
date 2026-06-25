@@ -14,5 +14,7 @@ public interface IInsumoService {
 	public Optional<Insumo>  searchInsumo(Long id);
 	
 	public void              agregarStock(Long id, int cantidad);
+	
+	public byte[] exportarListaCompras() throws Exception;
 
 }

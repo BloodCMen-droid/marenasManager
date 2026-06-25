@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cajero - Pedidos Listos</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+			<div class="header">
+				<h1>💰 Pedidos</h1>
+				<div>
+					<!-- Filtro por estado -->
+					<a class="btn-create" th:href="@{/cajero(estado='LISTO')}"
+						th:classappend="${estadoActual == 'LISTO'} ? ' activo' : ''">
+						🟡 Listos </a> <a class="btn-create"
+						th:href="@{/cajero(estado='CERRADO')}"
+						th:classappend="${estadoActual == 'CERRADO'} ? ' activo' : ''">
+						✅ Cerrados </a>
+				</div>
+			</div>
+
+			<div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Mesa</th>
+                        <th>Mesero</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(pedidos)}">
+                        <td colspan="6">No hay pedidos listos para cobrar</td>
+                    </tr>
+                    <tr th:each="p : ${pedidos}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="${#temporals.format(p.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${p.mesa?.numero}"></td>
+                        <td th:text="${p.usuarioCredential?.empleado?.nombre}"></td>
+                        <td><span th:text="${p.estado}"></span></td>
+                        <td>
+								<!-- Si está LISTO → ir a detalle para cobrar -->
+							 <a
+								th:if="${p.estado == 'LISTO'}" class="btn editar"
+								th:href="@{/cajero/detalle/{id}(id=${p.id})}"> 
+								👁 Ver Detalle 
+							</a> <!-- Si está CERRADO → ir directo a la factura -->
+							<a 
+								th:if="${p.estado == 'CERRADO' and p.factura != null}"
+								class="btn editar"
+								th:href="@{/cajero/factura/{id}(id=${p.factura.id})}">
+								 🧾 Ver Factura
+							 </a> 
+							 
+							 <a
+							  th:if="${p.estado == 'CERRADO' and p.factura != null}"
+								class="btn-create"
+								th:href="@{/cajero/factura/{id}/pdf(id=${p.factura.id})}">
+								📄 Descargar PDF 
+							</a>
+							</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

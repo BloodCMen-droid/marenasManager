@@ -12,15 +12,23 @@ public class Factura {
 
 @Id
 @GeneratedValue(strategy=GenerationType.IDENTITY)
+@Column(name = "id_factura")
 private Long id;
 
-
+@Column(name = "fech_emision_factura")
 private LocalDateTime fechaEmision;
 
-
+@Column(name = "total_factura")
 private BigDecimal total;
 
+@Column(name = "igv")
+private BigDecimal igv;
 
+@Column(name = "subtotal")
+private BigDecimal subtotal; // total sin IGV
+
+@Column(name = "metodo_pago")
+private String metodoPago;
 
 @OneToOne
 @JoinColumn(name="pedido_id")
@@ -33,6 +41,18 @@ private Cliente cliente;
 
 
 public Factura(){}
+
+
+
+public Cliente getCliente() {
+	return cliente;
+}
+
+
+
+public void setCliente(Cliente cliente) {
+	this.cliente = cliente;
+}
 
 
 
@@ -74,5 +94,43 @@ return pedido;
 public void setPedido(Pedido pedido){
 this.pedido=pedido;
 }
+
+
+
+public BigDecimal getIgv() {
+	return igv;
+}
+
+
+
+public void setIgv(BigDecimal igv) {
+	this.igv = igv;
+}
+
+
+
+public BigDecimal getSubtotal() {
+	return subtotal;
+}
+
+
+
+public void setSubtotal(BigDecimal subtotal) {
+	this.subtotal = subtotal;
+}
+
+
+
+public String getMetodoPago() {
+	return metodoPago;
+}
+
+
+
+public void setMetodoPago(String metodoPago) {
+	this.metodoPago = metodoPago;
+}
+
+
 
 }

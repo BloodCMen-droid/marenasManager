@@ -25,14 +25,47 @@ public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                		// 1. Permitir acceso a los recursos estáticos (¡La solución a tu problema actual!)
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/icon/**").permitAll()
-                        // 2. Permitir acceso a las páginas web públicas (lo que arreglamos en el paso anterior)
-                        .requestMatchers("/", "/login").permitAll()
-                        //Cualquier otra petición (como /listAll, /nuevo, etc.) requerirá autenticación
-                        .anyRequest().authenticated()
-                )
+        		.authorizeHttpRequests(auth -> auth
+        			    .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+        			    .requestMatchers("/", "/login").permitAll()
+
+        			    // ADMIN
+        			    .requestMatchers("/listEmpleados","/newEmpleado","/saveEmpleado",
+        			                     "/editEmpleado/**","/deleteEmpleado/**",
+        			                     "/listRoles","/newRol","/saveRol",
+        			                     "/editRol/**","/deleteRol/**",
+        			                     "/listProductos","/newProducto","/saveProducto",
+        			                     "/editProducto/**","/deleteProducto/**",
+        			                     "/listCategorias","/newCategoria","/saveCategoria",
+        			                     "/editCategoria/**","/deleteCategoria/**",
+        			                     "/listMesas","/newMesa","/saveMesa",
+        			                     "/editMesa/**","/deleteMesa/**","/recetaProducto/**", "/saveReceta", "/deleteReceta/**"
+        			    ).hasAuthority("ROLE_ADMIN")
+
+        			    // MESERO
+        			    .requestMatchers("/pedidos","/newPedido","/savePedido",
+        			                     "/saveDetalle","/detallePedido/**",
+        			                     "/agregarDetallePedido","/eliminarDetallePedido/**"
+        			    ).hasAuthority("ROLE_MESERO")
+
+        			    /// INVENTARIO
+        			    .requestMatchers("/inventario/**", "/listInsumos", "/newInsumo", 
+        		                 "/saveInsumo", "/editInsumo/**", "/deleteInsumo/**",
+        		                 "/addStock/**", "/saveStock")
+        	         	.hasAnyAuthority("ROLE_INVENTARIO", "ROLE_ADMIN")
+        			    
+        		 	    //COCINERO
+        			    .requestMatchers("/cocina", "/prepararDetalle/**")
+        			    .hasAuthority("ROLE_COCINERO")
+        			    
+        			  //CAJERO
+        			    .requestMatchers("/cajero", "/cajero/**")
+        			    .hasAuthority("ROLE_CAJERO")
+        			    
+        			    
+
+        			    .anyRequest().authenticated()
+        			)
                 // NUEVO: Spring Security maneja el login automáticamente
                 .formLogin(form -> form
                         .loginPage("/login")

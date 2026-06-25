@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Cocina</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/mantenimiento-productos.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <!-- INFO DEL PEDIDO -->
+            <h1>👨‍🍳 Detalle Pedido #<span th:text="${pedido.id}"></span></h1>
+            <p><strong>Mesa:</strong> <span th:text="${pedido.mesa.numero}"></span></p>
+            <p><strong>Mesero:</strong> <span th:text="${pedido.usuarioCredential?.empleado?.nombre}"></span></p>
+            <p><strong>Hora:</strong> <span th:text="${#temporals.format(pedido.fechaHora, 'dd/MM/yyyy HH:mm')}"></span></p>
+
+            <hr>
+
+            <!-- PRODUCTOS DEL PEDIDO -->
+            <h2>Productos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Adicional</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${pedido.detalles}">
+                        <td th:text="${d.producto.nombre}"></td>
+                        <td th:text="${d.cantidad}"></td>
+                        <td th:text="${d.adicional}"></td>
+                        <td>
+                            <span th:text="${d.estadoDProducto}"
+                                  th:style="${d.estadoDProducto == 'PREPARADO'} 
+                                             ? 'color:green' 
+                                             : 'color:red'">
+                            </span>
+                        </td>
+                        <td>
+                            <a th:if="${d.estadoDProducto == 'PENDIENTE'}"
+                               class="btn-create"
+                               th:href="@{/prepararDetalle/{id}(id=${d.id})}">
+                                ✅ Preparado
+                            </a>
+                            <span th:if="${d.estadoDProducto == 'PREPARADO'}">
+                                ✔ Listo
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+            <!-- REGISTRAR DEMORA -->
+            <h2>⏱ Registrar Demora</h2>
+            <form th:action="@{/saveDemora}" method="post">
+
+                <input type="hidden" name="pedidoId" th:value="${pedido.id}">
+
+                <div class="campo">
+                    <label>Minutos de demora</label>
+                    <input type="number" name="tiempoMinutos" min="1" placeholder="Ej: 10">
+                </div>
+
+                <div class="campo">
+                    <label>Motivo</label>
+                    <input type="text" name="motivo" placeholder="Ej: Falta de ingredientes">
+                </div>
+
+                <button type="submit" class="btn-create">📢 Notificar Demora</button>
+            </form>
+
+            <hr>
+
+            <!-- DEMORAS REGISTRADAS EN ESTE PEDIDO -->
+            <h2>Demoras Registradas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Motivo</th>
+                        <th>Minutos</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(pedido.demoras)}">
+                        <td colspan="4">Sin demoras registradas</td>
+                    </tr>
+                    <tr th:each="dem : ${pedido.demoras}">
+                        <td th:text="${dem.motivo}"></td>
+                        <td th:text="${dem.tiempoMinutos}"></td>
+                        <td th:text="${#temporals.format(dem.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <span th:text="${dem.estado}"
+                                  th:style="${dem.estado == 'NOTIFICADO'} 
+                                             ? 'color:green' 
+                                             : 'color:orange'">
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr>
+
+            <a class="btn-create" th:href="@{/cocina}">← Volver</a>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>

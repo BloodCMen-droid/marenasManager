@@ -7,68 +7,90 @@
 <nav class="sidebar" th:fragment="menu">
 
     <div class="logo">
-        <h2>🔥 ParrillaPro</h2>
+        <h2>🔥 Marenas Grill</h2>
         <span>Sistema de Ventas</span>
     </div>
 
     <div class="menu">
 
+        <!-- TODOS -->
         <a th:href="@{/index}">
             🏠 Dashboard
         </a>
 
-        <a th:href="@{/listProductos}">
-            🍖 Productos
-        </a>
-        
-         <a th:href="@{/listInsumos}">
-            🍖 Insumos
+        <!-- ADMIN -->
+        <a sec:authorize="hasAuthority('ROLE_ADMIN')"
+           th:href="@{/listEmpleados}">
+            👥 Empleados
         </a>
 
-        <a th:href="@{/listCategorias}">
+        <a sec:authorize="hasAuthority('ROLE_ADMIN')"
+           th:href="@{/listRoles}">
+            🔑 Roles
+        </a>
+
+        <a sec:authorize="hasAuthority('ROLE_ADMIN')"
+           th:href="@{/listProductos}">
+            🍖 Productos
+        </a>
+
+        <a sec:authorize="hasAuthority('ROLE_ADMIN')"
+           th:href="@{/listCategorias}">
             📋 Categorías
         </a>
 
-        <a th:href="@{/listRoles}">
-            📋 Roles
-        </a>
-
-        <a th:href="@{/listMesas}">
+        <a sec:authorize="hasAuthority('ROLE_ADMIN')"
+           th:href="@{/listMesas}">
             🪑 Mesas
         </a>
 
-        <a th:href="@{/newPedido}">
-            🧾 Registrar 
-            Pedidos
-        </a>
-        <a th:href="@{/pedidos}">
-            📊 Pedidos
+        <a sec:authorize="hasAuthority('ROLE_ADMIN')"
+           th:href="@{/listInsumos}">
+            📦 Insumos
         </a>
 
-        <a th:href="@{/listEmpleados}">
-            👨‍🍳 Empleados
+        <!-- MESERO -->
+        <a sec:authorize="hasAuthority('ROLE_MESERO')"
+           th:href="@{/newPedido}">
+            🧾 Registrar Pedido
         </a>
 
-        <a th:href="@{/listReportes}">
-            📊 Reportes
+        <a sec:authorize="hasAuthority('ROLE_MESERO')"
+           th:href="@{/pedidos}">
+            📋 Mis Pedidos
+        </a>
+
+        <!-- COCINERO -->
+        <a sec:authorize="hasAuthority('ROLE_COCINERO')"
+           th:href="@{/cocina}">
+            👨‍🍳 Cocina
+        </a>
+
+        <!-- CAJERO -->
+        <a sec:authorize="hasAuthority('ROLE_CAJERO')"
+           th:href="@{/cajero}">
+            💰 Caja
+        </a>
+
+        <!-- INVENTARIO -->
+        <a sec:authorize="hasAnyAuthority('ROLE_INVENTARIO','ROLE_ADMIN')"
+           th:href="@{/inventario}">
+            📦 Inventario
         </a>
 
     </div>
 
-         <div class="sidebar-footer">
-         
-<div class="user-info">
-    Bienvenido:
-    <span sec:authentication="principal.nombreEmpleado"></span>
-</div>
+    <div class="sidebar-footer">
+        <div class="user-info">
+            Bienvenido:
+            <span sec:authentication="principal.nombreEmpleado"></span>
+        </div>
         <a th:href="@{/logout}" class="logout">
             🚪 Cerrar Sesión
         </a>
-
     </div>
 
 </nav>
-
 
 </body>
 </html>

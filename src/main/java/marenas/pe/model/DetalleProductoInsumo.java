@@ -18,14 +18,16 @@ public class DetalleProductoInsumo {
     @JoinColumn(name="id_insumo")
     private Insumo insumo;
 
+    @Column(name = "gasto")
+    private Double gasto;
     
-    private Double cantidad;
+    
 
 
 	public DetalleProductoInsumo(Producto producto, Insumo insumo, Double cantidad) {
 		this.producto = producto;
 		this.insumo = insumo;
-		this.cantidad = cantidad;
+		this.gasto = cantidad;
 	}
 
 
@@ -63,14 +65,19 @@ public class DetalleProductoInsumo {
 	}
 
 
-	public Double getCantidad() {
-		return cantidad;
+	public Double getGasto() {
+		return gasto;
 	}
 
 
-	public void setCantidad(Double cantidad) {
-		this.cantidad = cantidad;
+	public void setGasto(Double gasto) {
+		this.gasto = gasto;
 	}
-    
+
+
+	
+
+
+
     
 }

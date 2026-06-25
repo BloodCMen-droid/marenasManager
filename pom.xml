@@ -107,6 +107,31 @@
 			<scope>runtime</scope>
 		</dependency>
 		
+		<!-- Source:
+		https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.13.0</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+
+<!-- Para compilar el jrxml -->
+<dependency>
+    <groupId>net.sf.jasperreports</groupId>
+    <artifactId>jasperreports</artifactId>
+    <version>6.20.6</version>
+</dependency>
+
+<!-- Para exportar a PDF -->
+<dependency>
+    <groupId>net.sf.jasperreports</groupId>
+    <artifactId>jasperreports-pdf</artifactId>
+    <version>7.0.7</version>
+</dependency>
+   
+		
 	</dependencies>
 
 	<build>

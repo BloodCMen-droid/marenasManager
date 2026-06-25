@@ -56,14 +56,19 @@
                                 <div class="actions">
                                     <a class="btn editar"
                                        th:href="@{/detallePedido/{id}(id=${p.id})}">
-                                        👁 Ver
+                                        👁 Ver Detalle
                                     </a>
                                     <a class="btn eliminar"
                                        th:href="@{/deletePedido/{id}(id=${p.id})}"
                                        onclick="return confirm('¿Eliminar pedido?')">
                                         🗑 Eliminar
                                     </a>
-                                </div>
+                                    
+                                    <!-- Dentro de las acciones de cada pedido -->
+									<a class="btn editar" th:href="@{/demoras/{id}(id=${p.id})}">
+										⏱ Ver Demoras 
+								    </a>
+								</div>
                             </td>
                         </tr>
                     </tbody>

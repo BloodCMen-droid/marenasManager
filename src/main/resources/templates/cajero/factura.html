@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Factura</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/producto-form.css}">
+</head>
+<body>
+<div class="container">
+
+    <div th:replace="~{fragments/dashboard :: menu}"></div>
+
+    <div class="content">
+        <div class="card">
+
+            <!-- CABECERA FACTURA -->
+            <div class="section">
+                <h1>🧾 FACTURA</h1>
+                <p><strong>N°:</strong> <span th:text="${factura.id}"></span></p>
+                <p><strong>Fecha:</strong> 
+                    <span th:text="${#temporals.format(factura.fechaEmision, 'dd/MM/yyyy HH:mm')}"></span>
+                </p>
+                <p><strong>Método de Pago:</strong> 
+                    <span th:text="${factura.metodoPago}"></span>
+                </p>
+            </div>
+
+            <hr>
+
+            <!-- DATOS CLIENTE -->
+            <div class="section">
+                <h2>Cliente</h2>
+                <p><strong>Nombre:</strong> <span th:text="${factura.cliente.nombre}"></span></p>
+                <p><strong>DNI:</strong> <span th:text="${factura.cliente.dni}"></span></p>
+                <p><strong>Teléfono:</strong> <span th:text="${factura.cliente.telefono}"></span></p>
+            </div>
+
+            <hr>
+
+            <!-- DATOS PEDIDO -->
+            <div class="section">
+                <h2>Pedido #<span th:text="${factura.pedido.id}"></span></h2>
+                <p><strong>Mesa:</strong> <span th:text="${factura.pedido.mesa.numero}"></span></p>
+                <p><strong>Atendido por:</strong> 
+                    <span th:text="${factura.pedido.usuarioCredential?.empleado?.nombre}"></span>
+                </p>
+            </div>
+
+            <hr>
+
+            <!-- DETALLE PRODUCTOS -->
+            <div class="section">
+                <h2>Detalle</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unit.</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="d : ${factura.pedido.detalles}">
+                            <td th:text="${d.producto.nombre}"></td>
+                            <td th:text="${d.cantidad}"></td>
+                            <td th:text="${d.producto.precio}"></td>
+                            <td th:text="${d.producto.precio * d.cantidad}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <!-- TOTALES -->
+            <div class="section">
+                <p><strong>Subtotal:</strong> S/ <span th:text="${factura.subtotal}"></span></p>
+                <p><strong>IGV (18%):</strong> S/ <span th:text="${factura.igv}"></span></p>
+                <p><strong>TOTAL:</strong> S/ <span th:text="${factura.total}"></span></p>
+            </div>
+
+            <hr>
+
+            <!-- BOTONES -->
+            <div class="section">
+                <a class="btn-create" th:href="@{/cajero}">
+                    ← Volver a Pedidos
+                </a>
+                
+                <a class="btn-create" 
+                    th:href="@{/cajero/factura/{id}/pdf(id=${factura.id})}">
+                   📄 Descargar PDF
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/dashboard.js}"></script>
+</body>
+</html>
